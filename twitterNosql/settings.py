@@ -25,7 +25,7 @@ SECRET_KEY = 'e9k0rgk$30garpaw(@g+w-o*h%^fgv7wu0w-fx30n&^xv0u$7b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'twitter.auth.auth_middleware.auth_middleware'
 ]
 
 ROOT_URLCONF = 'twitterNosql.urls'
