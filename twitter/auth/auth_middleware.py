@@ -8,9 +8,10 @@ def auth_middleware(get_response):
 
         token = request.META.get('HTTP_AUTHORIZATION')
 
-        if r.exists("tokens:"+token):
-            username =  r.hget("tokens:"+token,"username").decode("utf-8")
-            request.userinfo =  r.hgetall("users:"+username)
+        if token and r.exists("tokens:"+token):
+            username =  r.hget("tokens:"+token,"username")
+            request.userinfo = r.hgetall("users:"+username)
+            request.username = username
 
         response = get_response(request)
 
