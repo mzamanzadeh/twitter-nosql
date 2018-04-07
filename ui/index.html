@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="assets/lib/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/lib/ion-icons/ionicons.min.css">
+    <link rel="stylesheet" href="assets/lib/ui-bootstrap-csp.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/angular-toastr.min.css">
+</head>
+<body ng-app="app">
+<div id="modal-overlay"></div>
+<!-- Scroll up -->
+<div id="search-modal" ng-init="tagModeSearch = 1">
+    <img src="assets/img/exit.svg" class="exit" alt="">
+    <form class="search-form" ng-submit="globalSearch()">
+        <div class="search-options">
+            <a href="" ng-click="tagModeSearch = -1" ng-class="{'active' : (tagModeSearch == -1)}">
+                Search for Users
+            </a>
+            or
+            <a href="" ng-click="tagModeSearch = 1" ng-class="{'active' : (tagModeSearch == 1)}">Search for a Specific
+                #tag</a>
+        </div>
+        <label style="color: #fff">What are you looking for?</label>
+        <input type="text" ng-model="searchFormData.query" placeholder="Your search term here...">
+        <span>Press <b class="primary">enter</b> to confirm search term</span>
+    </form>
+</div>
+
+<div class="scrollup">
+    <i class="ion-ios-arrow-up"></i>
+</div>
+
+<!-- Main Container -->
+<div class="web-in">
+
+    <!-- Search Modal -->
+
+    <!-- Navigation -->
+    <nav id="light" class="transparent start-light border regular">
+        <div class="container" ng-include="'pages/includes/navigation.html'">
+        </div>
+    </nav>
+    <div ui-view></div>
+
+</div>
+<!-- end of web-in -->
+
+</body>
+<script src="assets/lib/jquery-2.2.1.min.js"></script>
+<script src="assets/lib/matchHeight-min.js"></script>
+<script src="assets/lib/contact/validator.js"></script>
+<script src="assets/lib/contact/contact.js"></script>
+<script src="assets/lib/pace.min.js"></script>
+<script src="assets/lib/headroom/headroom.min.js"></script>
+<script src="assets/lib/owl-slider/owl.carousel.min.js"></script>
+<script src="assets/lib/slideshow/anime.min.js"></script>
+<script src="assets/lib/slideshow/imagesloaded.pkgd.min.js"></script>
+<script src="assets/lib/slideshow/main.js"></script>
+<script src="assets/lib/parallax/materialize.min.js"></script>
+<script src="assets/lib/lightbox/lity.min.js"></script>
+<script src="assets/lib/tabs/jquery.tabslet.min.js"></script>
+<script src="assets/lib/masonry.pkgd.min.js"></script>
+<script src="main.js"></script>
+
+<script src="utils/global.js"></script>
+
+<script src="assets/lib/angular.min.js"></script>
+<script src="assets/lib/angular-ui-router.min.js"></script>
+<script src="assets/lib/angular-toastr.min.js"></script>
+<script src="assets/lib/angular-toastr.tpls.min.js"></script>
+<script src="assets/lib/ui-bootstrap.min.js"></script>
+<script src="assets/lib/ui-bootstrap-tpls.min.js"></script>
+<script src="assets/lib/angular-cookies.js"></script>
+
+<script src="app.js"></script>
+
+<script src="utils/notifications.js"></script>
+<script src="utils/urlConstants.js"></script>
+
+<script src="pages/home/home.js"></script>
+<script src="pages/home/tag.js"></script>
+<script src="pages/home/search.js"></script>
+
+<script src="pages/login/login.js"></script>
+<script src="pages/register/register.js"></script>
+<script src="pages/profile/profile.js"></script>
+<script src="pages/profile/me.js"></script>
+<script src="pages/trend/trend.js"></script>
+<script src="pages/home/users.js"></script>
+</html>

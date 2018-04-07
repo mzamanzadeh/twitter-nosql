@@ -1,0 +1,26 @@
+<section class="search-container trends-container">
+    <div class="search-top container-fluid no-max main-back">
+        <p class="trends-title">
+            <i class="ion-fireball"></i>
+            TRENDS
+            <i class="ion-fireball"></i>
+        </p>
+    </div>
+    <div class="container-fluid">
+        <div class="trends row ">
+            <div class="col-md-6 mr-auto ml-auto">
+                <table class="my-table trends-table">
+                    <tr ng-repeat="trend in vm.trends track by $index">
+                        <td>
+                            <i class="ion-fireball" style="color: rgba(139,0,0,{{1.1 - ($index+1)/vm.trends.length}})"></i>
+                        </td>
+                        <td>
+                            <p class="name" ng-click ui-sref="tag({tagName: trend.name})">#{{trend.name}}</p>
+                            <span class="count"><span class="num">{{trend.count}}</span> Tweets about "#{{trend.name}}"</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

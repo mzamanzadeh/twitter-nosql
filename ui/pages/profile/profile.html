@@ -1,0 +1,88 @@
+<section class="profile-page">
+    <div class="container-fluid no-max">
+        <div class="row">
+            <div class="col-md-3 sidebar">
+                <div class="item">
+                    <h3 class="info">Personal Information</h3>
+                    <div class="profile-pic"></div>
+                    <h1 class="text-center">{{vm.data.info.fullname}}</h1>
+                    <div class="row">
+                        <div class="col-md-6 col-offset-3"></div>
+                    </div>
+                    <hr>
+                    <div class="row center">
+                        <div class="col-sm-6 center" ng-click="seeFollowers(vm.data.username)">
+                            Followers
+                            <span class="profile-numstyle">{{vm.data.info.followers}}</span>
+                        </div>
+                        <div class="col-sm-6 center" ng-click="seeFollowings(vm.data.username)">
+                            Following
+                            <span class="profile-numstyle">{{vm.data.info.followings}}</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row center">
+                        <div class="col-sm-6 center">
+                            Tweets
+                            <span class="profile-numstyle">{{vm.data.info.tweetsCount}}</span>
+                        </div>
+                        <div class="col-sm-6 center">
+                            Retweets
+                            <span class="profile-numstyle">{{vm.data.info.retweetsCount}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <h3>Hashtags</h3>
+                    <hr>
+                    <ul class="tags">
+                        <li ng-repeat="tag in vm.data.hashtags"><a ng-click="goToTag(tag)">{{tag}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="blog four-col row">
+                    <div class="blog-sizer"></div>
+
+                    <div class="blog-item col-md-4 col-lg-4 col-sm-4" ng-repeat="tweet in vm.data.tweets">
+                        <div class="article">
+                            <p>{{tweet.date}}</p>
+                            <p class="retweet" ng-if="tweet.retweetedFrom">
+                                {{tweet.by}} Retweeted {{tweet.retweetedFrom}}'s Tweet
+                            </p>
+                        </div>
+                        <div class="author-info">
+                            <div class="author-pic">
+
+                            </div>
+                            <span class="author-name">
+                                    {{tweet.by}}
+                                </span>
+                        </div>
+                        <div ng-bind-html="tweet.text" class="article">
+
+                        </div>
+                        <div class="article-buttons">
+                            <ul>
+                                <li>
+                                    <i class="ion-ios-heart-outline"></i>
+                                    <span>{{tweet.likes}}</span>
+                                </li>
+                                <li>
+                                    <i class="ion-ios-loop-strong"></i>
+                                    <span>{{tweet.retweeted}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(function () {
+        initMasonry();
+    })
+</script>

@@ -1,0 +1,77 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="nav-ui n_">
+            <!--!loggedIn-->
+            <div ng-if="!loggedIn">
+                <a href="" class="auth-btns btn hidden-xs start-project" ui-sref="login"><span>Login</span></a>
+                <span class="text-center">or</span>
+                <a href="" class="auth-btns btn hidden-xs start-project" ui-sref="register"><span>Sign Up</span></a>
+                <div id="menu-icon"><span></span></div>
+            </div>
+            <!--loggedIn-->
+            <div ng-if="loggedIn" class="loggedin-section">
+                <div class="profile-pic"></div>
+                <span class="">{{myData.fullname}}</span>
+                <i class="ion-ios-plus-outline" tooltip-placement="bottom" ng-click="openNewPostModal()"
+                   uib-tooltip="New Tweet"></i>
+                <i class="ion-ios-person-outline" tooltip-placement="bottom" ui-sref="myProfile" ng-click uib-tooltip="Profile"></i>
+                <i class="ion-ios-close-outline" tooltip-placement="bottom" ng-click="logout()" uib-tooltip="LogOut"></i>
+            </div>
+        </div>
+        <div class="logo-holder n_">
+            <!-- <div>
+                 <a href="index.html">
+                     <img class="logo" src="assets/img/logo-light.svg" alt="">
+                     <img class="logo alt" src="assets/img/logo-dark.svg" alt="">
+                 </a>
+             </div>-->
+        </div>
+        <div class="nav-content n_">
+            <ul>
+                <li><a href="" class="search">
+                    <img class="white-icon" src="assets/img/search.svg" alt="">
+                    <img class="dark-icon" src="assets/img/search-dark.svg" alt="">
+                    SEARCH
+                </a></li>
+                <li><a ui-sref="home">Home</a>
+                </li>
+                <li>
+                    <a ui-sref="trends">Trends</a>
+                </li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+
+        $(function () {
+            // --------------------------
+            // Search Modal
+            // --------------------------
+            // --------------------------
+            // Search Modal
+            // --------------------------
+            var body = $("body");
+            var sm = $('#search-modal'),
+                ee = $('#search-modal form, .exit');
+            $('nav a.search').on(
+                'click',
+                function () {
+                    sm.addClass('appear');
+                    body.addClass('modal-open');
+                    setTimeout(function () {
+                        ee.addClass('pop');
+                    }, 300);
+                    return false;
+                });
+            $('#search-modal .exit').on('click', function () {
+                sm.removeClass('appear');
+                ee.removeClass('pop');
+                body.removeClass('modal-open');
+                return false;
+            });
+        })
+    }, 200)
+</script>

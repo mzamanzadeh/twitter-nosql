@@ -1,0 +1,51 @@
+<section id="c_contact" class="auth-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 title">
+                <h2>Join Us!</h2>
+                <h4>Use the form below to sign up</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 ml-auto mr-auto">
+                <form class="contact-form" ng-submit="vm.register()">
+                    <div class="input-field col-sm-12">
+                        <div class="form-group">
+                            <input id="form-name" name="name" ng-model="vm.formData.fullname" type="text"
+                                   placeholder="Your Name *" required="required"
+                                   data-error="Name is required.">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="input-field col-sm-12">
+                        <div class="form-group">
+                            <input id="form-email" name="email" type="email" ng-model="vm.formData.email"
+                                   placeholder="Email Address *" required="required"
+                                   data-error="Email is required.">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="input-field col-sm-12">
+                        <div class="form-group">
+                            <input id="form-tel" name="tel" type="text" ng-model="vm.formData.username"
+                                   placeholder="Username *" data-error="Please provide real phone number.">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="input-field col-sm-12">
+                        <div class="form-group">
+                            <input id="form-name" name="name" type="password" ng-model="vm.formData.password"
+                                   placeholder="Your Password *" required="required"
+                                   data-error="Password is required.">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 center">
+                        <input type="submit" value="Register">
+                        <div class="messages"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

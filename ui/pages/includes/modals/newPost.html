@@ -1,0 +1,31 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="mc.cancel()"><i class="ion-ios-close-empty"></i></button>
+        <h4 class="modal-title text-center" style="font-size: 16px; font-weight: 700">
+            <i class="ion-ios-medical-outline" style="padding-right: 5px"></i>
+             New Tweet
+            <i class="ion-ios-medical-outline" style="padding-left: 5px"></i>
+        </h4>
+    </div>
+    <div class="modal-body">
+        <div id="new-post-container">
+            <form class="contact-form" ng-submit="mc.send()">
+                <div class="form-group has-error has-danger">
+            <textarea id="form-textarea" name="Message" maxlength="250" ng-maxlength="250" cols="30" rows="5"
+                      ng-model="mc.formData.tweet" placeholder="Your Tweet Caption Here * (Max 250 Characters)"
+                      required="required"></textarea>
+                </div>
+            </form>
+            {{mc.contentLength}} / 250 Characters
+            <div class="progress-post">
+                <div class="inner-progress" ng-style="{'width': (mc.contentLength/250*100) + '%'}"></div>
+            </div>
+            <div class="hashtags" ng-if="mc.hashtags.length > 0">
+                <span class="tag" ng-repeat="hashtag in mc.hashtags">{{hashtag}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="" class="btn" ng-click="mc.send()"><span>Send !</span></a>
+    </div>
+</div>

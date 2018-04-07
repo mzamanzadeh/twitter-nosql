@@ -1,0 +1,107 @@
+<section class="search-container">
+    <div class="search-top container-fluid no-max main-back">
+        <p ng-if="vm.tagMode">
+            Posts with : <span class="tag">#{{vm.tag}}</span>
+        </p>
+        <p ng-if="vm.searchMode">
+            Search Results for : <span class="tag">{{vm.query}}</span>
+        </p>
+        <p ng-if="vm.homeMode" style="font-size: 90px;">
+            <i class="ion-ios-medical"></i>
+            HOME
+            <i class="ion-ios-medical"></i>
+        </p>
+        <p ng-if="vm.userMode">
+            User Search Results for : <span class="tag">{{vm.query}}</span>
+        </p>
+    </div>
+    <div ng-if="!loggedIn && !vm.tagMode" style="font-size: 45px" class="text-center should-login">
+        You Must
+        <a ui-sref="login" class="btn"><span>Login</span></a>
+        or
+        <a ui-sref="register" class="btn"><span>Sign Up</span></a>
+        to See Your TimeLine!
+    </div>
+    <div class="container-fluid no-max" ng-if="!vm.userMode" style="margin: 30px 0;">
+        <div ng-if="loggedIn && vm.tweets.length <= 0 && vm.homeMode" class="no-result">
+            <i class="ion-sad-outline"></i>
+            <p>There is Nothing I Can Show You Right Now! :(</p>
+        </div>
+        <div ng-if="vm.tweets.length <= 0 && vm.tagMode" class="no-result">
+            <i class="ion-sad-outline"></i>
+            <p>There is Nothing I Can Show You Right Now! :(</p>
+        </div>
+        <div class="row" ng-if="vm.tweets">
+            <!-- Blog -->
+            <div class="blog four-col row">
+                <div class="blog-sizer"></div>
+                <div class="blog-item col-sm-3 col-md-3 col-lg-3" ng-if="tweet.text" ng-repeat="tweet in vm.tweets">
+                    <div class="article">
+                        <p>{{tweet.date}}</p>
+                        <p class="retweet" ng-if="tweet.retweetedFrom">
+                            {{tweet.by}} Retweeted {{tweet.retweetedFrom}}'s Tweet
+                        </p>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-pic">
+
+                        </div>
+                        <span class="author-name" ng-click ui-sref="profile({username: tweet.by})">
+                            {{tweet.by}}
+                        </span>
+                        <span ng-if="vm.tagMode && tweet.by !== myData.username" class="follow-unfollow">
+                            <i class="ion-ios-personadd" ng-click="followUser(tweet.by)"
+                               uib-tooltip="Follow"></i>
+                            <i class="ion-ios-person-outline" uib-tooltip="Unfollow"
+                               ng-click="unfollowUser(tweet.by)"></i>
+                        </span>
+                    </div>
+                    <div class="article" ng-bind-html="tweet.text">
+                    </div>
+                    <div class="article-buttons">
+                        <ul>
+                            <li ng-click="like(tweet)">
+                                <i uib-tooltip="Likes"
+                                   ng-class="{'ion-ios-heart-outline':(!tweet.isLiked), 'ion-ios-heart':(tweet.isLiked)}"></i>
+                                <span>{{tweet.likes}}</span>
+                            </li>
+                            <li>
+                                <i uib-tooltip="Retweet" ng-click="retweet(tweet)" class="ion-ios-loop-strong"></i>
+                                <span>{{tweet.retweeted}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- end of item -->
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid no-max" ng-if="vm.userMode" style="margin: 30px 0;">
+        <div class="row">
+            <!-- Blog -->
+            <div class="blog four-col row">
+                <div class="blog-sizer"></div>
+                <div class="blog-item col-sm-3 col-md-3 col-lg-3" ng-repeat="user in vm.users">
+                    <div class="author-info" style="border: none">
+                        <div class="author-pic">
+
+                        </div>
+                        <span class="author-name" ui-sref="profile({username: user.username})" ng-click>
+                            {{user.fullname}}
+                        </span>
+                        <span class="follow-unfollow">
+                            <i class="ion-ios-personadd" ng-click="followUser(user.username)" uib-tooltip="Follow"></i>
+                            <i class="ion-ios-person-outline" uib-tooltip="Unfollow"
+                               ng-click="unfollowUser(user.username)"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(function () {
+        initMasonry();
+    })
+</script>

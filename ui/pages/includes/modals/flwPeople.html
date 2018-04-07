@@ -1,0 +1,21 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="mc.cancel()"><i class="ion-ios-close-empty"></i></button>
+        <h4 class="modal-title text-center" style="font-size: 16px; font-weight: 700">
+            {{mc.title}}
+        </h4>
+    </div>
+    <div class="modal-body">
+        <table class="my-table trends-table follow-table">
+            <tr ng-repeat="data in mc.data track by $index">
+                <td>
+                    <div class="profile-pic"></div>
+                    <span>{{data}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <a href="" class="btn" ng-click="mc.cancel()"><span>Close</span></a>
+    </div>
+</div>
