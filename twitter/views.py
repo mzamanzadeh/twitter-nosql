@@ -20,7 +20,7 @@ def register(request):
 
    if r.exists(userKey):
        return json_response({'status':False},400)
-   
+
    r.hset(userKey, 'username', data['username'])
    r.hset(userKey, 'fullname', data['fullname'])
    r.hset(userKey, 'email', data['email'])
