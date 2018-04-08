@@ -8,7 +8,7 @@ def connectToRedis():
     return redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True , charset="utf-8")
 
 def fetchTweet(tweetKey):
-    return fetch(tweetKey, ['createdAt', 'text', 'by', 'retweeted', 'retweetFrom', 'likes'])
+    return fetch(tweetKey, ['createdAt', 'text', 'by', 'retweeted', 'retweetedFrom', 'likes'])
 
 def fetch(tweetKey ,keys):
     r = connectToRedis()
