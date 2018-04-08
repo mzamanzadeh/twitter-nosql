@@ -18,6 +18,9 @@ def register(request):
 
    userKey = 'users:'+data['username']
 
+   if r.exists(userKey):
+       return json_response({'status':False},400)
+
    r.hset(userKey, 'username', data['username'])
    r.hset(userKey, 'fullname', data['fullname'])
    r.hset(userKey, 'email', data['email'])
@@ -78,14 +81,15 @@ def newTweet(request):
     r.hset(tweetKey, 'by', request.username)
     r.hset(tweetKey, 'likes', 0)
     r.hset(tweetKey, 'retweeted', 0)
-    r.hset(tweetKey, 'isRetweet', 0)
+    r.hset(tweetKey, 'retweetedFrom', "")
     r.hset(tweetKey, 'createdAt', now)
 
-    r.rpush("tweets:"+request.username, tweetKey)
+    r.lpush("tweets:"+request.username, tweetKey)
 
     # push into follower's timeline (sorted by time)
-    for followerIndex in range(0, r.llen("followers:"+request.username)):
-        r.zadd( "timelines:" + r.lindex("followers:"+request.username, followerIndex), now, tweetKey)
+    for follower in r.smembers("followers:"+request.username):
+        r.zadd( "timelines:" + follower, now, tweetKey)
+    r.zadd( "timelines:" + request.username, now, tweetKey)
 
     #find hashtags
     hashtags = re.findall(r"#(\w+)", data['tweet'])
@@ -101,51 +105,41 @@ def newTweet(request):
 
 @csrf_exempt
 @login_check
-def listTweet(request):
-    import re
-    body_unicode = request.body.decode('utf-8')
-    data = json.loads(body_unicode)
-
-    r = connectToRedis()
-
-    now = time.time()
-
-    tweetKey = "tweets:" + request.username + ":"+ str(int(now))
-
-    r.hset(tweetKey, 'text', data['tweet'])
-    r.hset(tweetKey, 'likes', 0)
-    r.hset(tweetKey, 'retweeted', 0)
-    r.hset(tweetKey, 'retweetFrom', None)
-    r.hset(tweetKey, 'createdAt', now)
-
-    r.rpush("tweets:"+request.username, tweetKey)
-
-    # push into follower's timeline (sorted by time)
-    for followerIndex in range(0, r.llen("followers:"+request.username)):
-        r.zadd( "timelines:" + r.lindex("followers:"+request.username, followerIndex), now, tweetKey)
-
-    #find hashtags
-    hashtags = re.findall(r"#(\w+)", data['tweet'])
-
-    for hashtag in hashtags:
-        r.rpush("hashtags:"+hashtag, tweetKey)
-        r.zincrby("hashtags:trends", hashtag, amount= 1)
-
-    ret = {
-        'success': True,
-    }
-    return json_response(ret)
-
-
-@login_check
-def myTweets(request):
-    r = connectToRedis()
-    tweets = []
-    for tweetKey in r.lrange("tweets:" + request.username,0,-1):
-        tweets.append(fetchTweet(tweetKey))
-
-    return json_response({'tweets':tweets})
-
+# def listTweet(request):
+#     import re
+#     body_unicode = request.body.decode('utf-8')
+#     data = json.loads(body_unicode)
+#
+#     r = connectToRedis()
+#
+#     now = time.time()
+#
+#     tweetKey = "tweets:" + request.username + ":"+ str(int(now))
+#
+#     r.hset(tweetKey, 'text', data['tweet'])
+#     r.hset(tweetKey, 'likes', 0)
+#     r.hset(tweetKey, 'retweeted', 0)
+#     r.hset(tweetKey, 'retweetedFrom', "")
+#     r.hset(tweetKey, 'createdAt', now)
+#
+#     r.rpush("tweets:"+request.username, tweetKey)
+#
+#     # push into follower's timeline (sorted by time)
+#     for followerIndex in range(0, r.llen("followers:"+request.username)):
+#         r.zadd( "timelines:" + r.lindex("followers:"+request.username, followerIndex), now, tweetKey)
+#
+#
+#     #find hashtags
+#     hashtags = re.findall(r"#(\w+)", data['tweet'])
+#
+#     for hashtag in hashtags:
+#         r.rpush("hashtags:"+hashtag, tweetKey)
+#         r.zincrby("hashtags:trends", hashtag, amount= 1)
+#
+#     ret = {
+#         'success': True,
+#     }
+#     return json_response(ret)
 
 @login_check
 def timeline(request):
@@ -233,16 +227,25 @@ def unfollow(request):
 
     return json_response({'success': True})
 
+@csrf_exempt
 @login_check
 def followers(request):
+    body_unicode = request.body.decode('utf-8')
+    data = json.loads(body_unicode)
+
     r = connectToRedis()
-    results = r.smembers("followers:" + request.username)
+    results = list(r.smembers("followers:" +  data['username']))
+
     return json_response(results)
 
+@csrf_exempt
 @login_check
 def followings(request):
+    body_unicode = request.body.decode('utf-8')
+    data = json.loads(body_unicode)
+
     r = connectToRedis()
-    results = r.smembers("followings:" + request.username)
+    results = list(r.smembers("followings:" + data['username']))
     return json_response(results)
 
 @csrf_exempt
@@ -265,17 +268,58 @@ def retweet(request):
     r.hset(tweetKey, 'retweetedFrom', tweet['by'])
     r.hset(tweetKey, 'createdAt', now)
 
-    r.rpush("tweets:" + request.username, tweetKey)
+    r.lpush("tweets:" + request.username, tweetKey)
 
     # push into follower's timeline (sorted by time)
-    for followerIndex in range(0, r.llen("followers:" + request.username)):
-        r.zadd("timelines:" + r.lindex("followers:" + request.username, followerIndex), now, tweetKey)
+
+    for follower in r.smembers("followers:"+request.username):
+        r.zadd( "timelines:" + follower, now, tweetKey)
+    r.zadd( "timelines:" + request.username, now, tweetKey)
 
     # find hashtags
-    hashtags = re.findall(r"#(\w+)", data['tweet'])
+    hashtags = re.findall(r"#(\w+)", tweet['text'])
 
     for hashtag in hashtags:
         r.rpush("hashtags:" + hashtag, tweetKey)
         r.zincrby("hashtags::trends", hashtag, amount=1)
+
+    return json_response({'success': True})
+
+@csrf_exempt
+def profile(request):
+    body_unicode = request.body.decode('utf-8')
+    data = json.loads(body_unicode)
+    r = connectToRedis()
+
+    tweets = []
+    for tweetKey in r.lrange("tweets:" + data['username'], 0, -1):
+        tweets.append(fetchTweet(tweetKey))
+
+    info = {}
+
+    info['followings'] = r.scard("followings:"+data['username'])
+    info['followers'] = r.scard("followers:"+data['username'])
+
+    info['fullname'] = r.hget("users:"+data['username'],"fullname")
+
+    return  json_response({'tweets': tweets,'info': info})
+
+
+@csrf_exempt
+@login_check
+def like(request):
+    body_unicode = request.body.decode('utf-8')
+    data = json.loads(body_unicode)
+    r = connectToRedis()
+
+    tweetKey = data['key']
+
+
+    if r.sismember(tweetKey+":likes", request.username):
+        return json_response({"success":False},400)
+
+    r.sadd(tweetKey + ":likes", request.username)
+    r.hincrby(tweetKey, "likes",1)
+
 
     return json_response({'success': True})
