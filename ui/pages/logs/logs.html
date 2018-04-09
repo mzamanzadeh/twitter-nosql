@@ -1,0 +1,20 @@
+<section class="search-container trends-container">
+    <div class="search-top container-fluid no-max main-back">
+        <p>
+          LOGS
+        </p>
+    </div>
+    <div class="container-fluid">
+        <div class="trends row ">
+            <div class="col-md-6 mr-auto ml-auto">
+                <table class="my-table trends-table">
+                    <tr ng-repeat="log in vm.logs track by $index">
+                        <td>
+                            {{log}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

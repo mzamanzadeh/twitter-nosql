@@ -16,5 +16,6 @@ app.constant("UrlConstants", {
     like: apiUrl + "like",
     profile: apiUrl + "profile",
     followers: apiUrl + "getFollowers",
-    followings: apiUrl + "getFollowings"
+    followings: apiUrl + "getFollowings",
+    logs: apiUrl + "logs"
 });

@@ -71,6 +71,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             controller: "usersCtrl",
             controllerAs: "vm",
             templateUrl: "pages/home/home.html"
+        })
+        .state("logs", {
+            url: "/logs",
+            controller: "logsCtrl",
+            controllerAs: "vm",
+            templateUrl: "pages/logs/logs.html"
         });
     $urlRouterProvider.otherwise('/home');
 });
