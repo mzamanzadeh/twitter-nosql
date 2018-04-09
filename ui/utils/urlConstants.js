@@ -1,5 +1,5 @@
 var app = angular.module("app");
-var apiUrl = "http://172.20.107.107:8000/";
+var apiUrl = "http://localhost:8000/";
 app.constant("UrlConstants", {
     login: apiUrl + "login",
     register: apiUrl + "register",

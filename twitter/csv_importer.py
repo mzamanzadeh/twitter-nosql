@@ -59,9 +59,9 @@ def follow(request):
             r.sadd("followings:" + row[0], row[1])
 
             r.lpush("logs:" + row[0],
-                    "You followed " + row[1] + " at " + datetime.now().strftime("%d, %b %Y %H:%m"))
+                    row[0]+" followed " + row[1] + " at " + datetime.now().strftime("%d, %b %Y %H:%m"))
             r.lpush("logs:" + row[1],
-                    row[0] + " has followed you at " + datetime.now().strftime("%d, %b %Y %H:%m"))
+                    row[0] + " has followed "+row[1]+" at " + datetime.now().strftime("%d, %b %Y %H:%m"))
 
             for tweetKey in r.lrange("tweets:" + row[1], 0, -1):
                 t = fetchTweet(tweetKey)
