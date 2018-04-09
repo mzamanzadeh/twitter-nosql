@@ -4,7 +4,7 @@ from twitter.utils import *
 def login_check(function):
     def wrap(request, *args, **kwargs):
         r = connectToRedis()
-        if r.exists("tokens:"+request.META.get('HTTP_AUTHORIZATION')):
+        if r.exists("tokens:"+request.META.get('HTTP_AUTHORIZATION',"")):
             return function(request, *args, **kwargs)
         else:
             raise PermissionDenied

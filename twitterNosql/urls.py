@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from twitter import views
+from twitter import views, csv_importer
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -35,5 +35,11 @@ urlpatterns = [
     url(r'^retweet', views.retweet),
     url(r'^profile', views.profile),
     url(r'^like', views.like),
+    url(r'^logs', views.logs),
+
+    url(r'^import/users', csv_importer.users),
+    url(r'^import/tweets', csv_importer.tweets),
+    url(r'^import/follow', csv_importer.follow),
+    url(r'^import/retweet', csv_importer.retweet),
 
 ]

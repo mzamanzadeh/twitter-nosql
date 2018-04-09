@@ -79,7 +79,7 @@ def newTweet(request):
 
     r.hset(tweetKey, 'text', data['tweet'])
     r.hset(tweetKey, 'by', request.username)
-    r.hset(tweetKey, 'likes', 0)
+    r.hset(tweetKey, 'likes', data.get("likes",0))
     r.hset(tweetKey, 'retweeted', 0)
     r.hset(tweetKey, 'retweetedFrom', "")
     r.hset(tweetKey, 'createdAt', now)
@@ -205,6 +205,9 @@ def follow(request):
     r.sadd("followers:"+data['username'],request.username)
     r.sadd("followings:"+request.username,data['username'])
 
+    r.lpush("logs:"+request.username,"You followed "+data['username']+" at "+datetime.now().strftime("%d, %b %Y %H:%m"))
+    r.lpush("logs:"+data['username'],request.username+" has followed you at "+datetime.now().strftime("%d, %b %Y %H:%m"))
+
     for tweetKey in r.lrange("tweets:"+data['username'],0,-1):
         t = fetchTweet(tweetKey)
         r.zadd("timelines:"+request.username, float(t.get('createdAt')), tweetKey)
@@ -270,6 +273,8 @@ def retweet(request):
 
     r.lpush("tweets:" + request.username, tweetKey)
 
+    r.lpush("logs:"+request.username,"You have retweetted \""+tweet['text']+"\" at "+datetime.now().strftime("%d, %b %Y %H:%m"))
+
     # push into follower's timeline (sorted by time)
 
     for follower in r.smembers("followers:"+request.username):
@@ -304,7 +309,6 @@ def profile(request):
 
     return  json_response({'tweets': tweets,'info': info})
 
-
 @csrf_exempt
 @login_check
 def like(request):
@@ -318,8 +322,24 @@ def like(request):
     if r.sismember(tweetKey+":likes", request.username):
         return json_response({"success":False},400)
 
+    tweet = fetchTweet(tweetKey)
+    r.lpush("logs:"+request.username,"You have liked \""+tweet['text']+"\" at "+datetime.now().strftime("%d, %b %Y %H:%m"))
+
     r.sadd(tweetKey + ":likes", request.username)
     r.hincrby(tweetKey, "likes",1)
 
 
     return json_response({'success': True})
+
+
+@login_check
+def logs(request):
+
+    r = connectToRedis()
+
+    result = []
+
+    for log in r.lrange("logs:"+request.username,0,-1):
+        result.append(log)
+
+    return json_response(result)
